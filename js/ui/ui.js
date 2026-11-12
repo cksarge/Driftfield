@@ -63,20 +63,35 @@ export function fxChip(e) {
 }
 
 // ---------------- tooltips ----------------
+// A tooltip belongs to the element that opened it. When that element is
+// removed or hidden (a panel closes or re-renders, a picker is dismissed…)
+// no pointerleave ever fires, so we also watch for that and hide it.
 const tip = () => $('#tooltip');
+let tipAnchor = null;
 export function attachTip(el, fn) {
-  el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') showTip(fn(), e); });
+  el.addEventListener('pointerenter', (e) => { if (e.pointerType === 'mouse') showTip(el, fn(), e); });
   el.addEventListener('pointermove', (e) => { if (e.pointerType === 'mouse') moveTip(e); });
   el.addEventListener('pointerleave', hideTip);
-  el.addEventListener('contextmenu', (e) => { e.preventDefault(); showTip(fn(), e); setTimeout(hideTip, 2500); });
+  el.addEventListener('contextmenu', (e) => {
+    e.preventDefault(); showTip(el, fn(), e);
+    setTimeout(() => { if (tipAnchor === el) hideTip(); }, 2500);
+  });
 }
-function showTip(html, e) { const t = tip(); t.innerHTML = html; t.hidden = false; moveTip(e); }
+function showTip(el, html, e) { const t = tip(); tipAnchor = el; t.innerHTML = html; t.hidden = false; moveTip(e); }
 function moveTip(e) {
   const t = tip(); const r = t.getBoundingClientRect();
   t.style.left = Math.min(window.innerWidth - r.width - 8, e.clientX + 14) + 'px';
   t.style.top = Math.min(window.innerHeight - r.height - 8, e.clientY + 14) + 'px';
 }
-export function hideTip() { tip().hidden = true; }
+export function hideTip() { tipAnchor = null; tip().hidden = true; }
+
+const anchorGone = () => tipAnchor && (!tipAnchor.isConnected || !tipAnchor.getClientRects().length);
+new MutationObserver(() => { if (anchorGone()) hideTip(); })
+  .observe(document.body, { childList: true, subtree: true, attributes: true, attributeFilter: ['hidden', 'class', 'style'] });
+document.addEventListener('pointermove', (e) => { if (tipAnchor && (anchorGone() || !tipAnchor.contains(e.target))) hideTip(); }, true);
+document.addEventListener('pointerdown', (e) => { if (tipAnchor && e.pointerType === 'mouse' && anchorGone()) hideTip(); }, true);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') hideTip(); });
+window.addEventListener('blur', hideTip);
 
 // ---------------- toasts ----------------
 export function toast(text, kind = '') {
@@ -116,6 +131,7 @@ export function refreshPanel() {
 export function closePanel(silent = false) {
   if (!current) return;
   const c = current; current = null;
+  hideTip();
   $('#panel-root').hidden = true; $('#panel-root').innerHTML = '';
   if (c.onClose) c.onClose();
   if (!silent) audio.sfx('soft');
