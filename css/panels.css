@@ -4,6 +4,10 @@
    ============================================================ */
 #panel-root, #picker-root { position: fixed; inset: 0; z-index: 30; display: flex; align-items: center; justify-content: center; }
 #picker-root { z-index: 45; }
+/* Windows, confirm boxes and toasts opened from the title screen must sit above it. */
+body.on-title #panel-root { z-index: 72; }
+body.on-title #picker-root { z-index: 74; }
+body.on-title #toasts { z-index: 76; }
 .scrim { position: absolute; inset: 0; background: rgba(40, 40, 80, 0.25); backdrop-filter: blur(2px); }
 .panel, .picker {
   position: relative; width: min(560px, 94vw); max-height: min(86vh, 900px); display: flex; flex-direction: column;

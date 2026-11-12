@@ -22,11 +22,13 @@ export const hooks = { newGame: null, loadGame: null, toTitle: null, sleep: null
 export function showTitle() {
   const el = $('#title');
   el.hidden = false;
+  document.body.classList.add('on-title');
   $('#hud').hidden = true; $('#toolbar').hidden = true; $('#sidebar').hidden = true;
   renderTitle();
 }
 export function hideTitle() {
   $('#title').hidden = true;
+  document.body.classList.remove('on-title');
   $('#hud').hidden = false; $('#toolbar').hidden = false; $('#sidebar').hidden = false;
 }
 

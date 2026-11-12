@@ -7,7 +7,7 @@
 //  so players get the update (and add any NEW files to the list).
 // =============================================================
 
-const CACHE_VERSION = 'driftfield-v1';
+const CACHE_VERSION = 'driftfield-v2';
 
 const FILES = [
   './',
