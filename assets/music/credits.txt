@@ -1,0 +1,25 @@
+DRIFTFIELD MUSIC CREDITS
+========================
+
+Fill in one block per track as soon as you download it.
+Every track must have a license that allows use in a public
+website and a public GitHub repo (CC0, CC BY, CC BY-SA, or
+another license that clearly allows it).
+
+Copy this template for each track:
+
+----------------------------------------
+File:      calm.mp3
+Mood:      calm
+Title:     
+Artist:    
+Source:    (the exact web page you downloaded it from)
+License:   (e.g. CC0 1.0, CC BY 4.0) + link to the license
+Changes:   (e.g. "trimmed to loop", "lowered volume", or "none")
+----------------------------------------
+
+
+TRACKS
+======
+
+(none yet: the game currently uses its built-in procedural music)
