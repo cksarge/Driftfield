@@ -507,8 +507,45 @@ export function drawAnimal(ctx, a, t, sel) {
       line(ctx, -12, -4, -17, -10 + Math.sin(t * 12) * 3, body, 3);
       break;
     }
+    case 'puff_bunny': {
+      ellipse(ctx, -1, -2, 11, 9, body);
+      if (a.pattern === 'patched') ellipse(ctx, -4, -4, 5, 4, dark);
+      if (a.pattern === 'starry') star(ctx, -3, -4, 3.5, '#fff3a0');
+      circle(ctx, -12, -2, a.pattern === 'cottontail' ? 5 : 3.5, '#ffffff');
+      circle(ctx, 9, -8, 6.5, body);
+      if (a.pattern === 'lop') { ellipse(ctx, 5, -5, 2.5, 7, dark); ellipse(ctx, 10, -5, 2.5, 7, body); }
+      else { ellipse(ctx, 6, -18, 2.5, 7, body); ellipse(ctx, 10, -18, 2.5, 7, body); ellipse(ctx, 10, -18, 1.2, 5, '#f4b0c0'); }
+      circle(ctx, 12, -9, 1.2, '#333'); circle(ctx, 15, -7, 1, '#e08a9a');
+      ellipse(ctx, -5, 6, 4, 2.5, body); ellipse(ctx, 5, 6, 4, 2.5, body);
+      break;
+    }
+    case 'drift_duck': {
+      ellipse(ctx, 0, -2, 12, 8, body);
+      if (a.pattern === 'speckled') for (let i = 0; i < 5; i++) circle(ctx, -6 + i * 3, -3 + (i % 2) * 3, 1.2, dark);
+      if (a.pattern === 'rainbow') for (let i = 0; i < 3; i++) ellipse(ctx, -4, -4 + i * 3, 5, 1.4, hsl(i * 120 + 20, 70, 60));
+      ellipse(ctx, -3, -4, 7, 4, hsl(a.hue, a.light > 90 ? 15 : 45, a.light - 10));
+      circle(ctx, 9, -11, 6, a.pattern === 'mallard' ? '#3f8a5a' : body);
+      if (a.pattern === 'crested') poly(ctx, [6, -16, 7, -21, 10, -16], dark);
+      poly(ctx, [14, -12, 20, -10, 14, -8], '#f0a040'); circle(ctx, 11, -12, 1.2, '#333');
+      line(ctx, -2, 6, -2, 9, '#f0a040', 2); line(ctx, 3, 6, 3, 9, '#f0a040', 2);
+      ellipse(ctx, 0, 12, 10, 2, 'rgba(200,230,255,0.6)');
+      break;
+    }
+    case 'cumulus_cow': {
+      for (const lx of [-9, -4, 5, 10]) line(ctx, lx, 3, lx, 11, dark, 3);
+      cloud(ctx, -20, 0, 0.47, body);
+      if (a.pattern === 'spotted') { circle(ctx, -8, -6, 4, dark); circle(ctx, 4, -3, 3, dark); circle(ctx, -2, 2, 2.5, dark); }
+      if (a.pattern === 'belted') fillRR(ctx, -4, -10, 7, 14, 2, dark);
+      if (a.pattern === 'stormcloud') line(ctx, -3, -11, 1, -4, '#ffe066', 2);
+      if (a.pattern === 'sunset') { ctx.globalAlpha = 0.5; cloud(ctx, -20, 0, 0.47, '#ffb38a'); ctx.globalAlpha = 1; }
+      ellipse(ctx, 16, -6, 7, 6, body); ellipse(ctx, 20, -3, 4, 3, '#f4b0b0');
+      poly(ctx, [12, -11, 10, -16, 14, -12], '#e8dcc0'); poly(ctx, [19, -11, 21, -16, 18, -12], '#e8dcc0');
+      circle(ctx, 17, -8, 1.3, '#333');
+      break;
+    }
     default: circle(ctx, 0, 0, 10, body);
   }
+  if ((a.traits || []).length) star(ctx, -14, -16, 2.5 + (a.traits.length - 1), '#fff3a0');
   if (a.glow || a.pattern === 'glow') { ctx.globalAlpha = 0.25; circle(ctx, 0, -4, 18, '#fff3a0'); ctx.globalAlpha = 1; }
   ctx.restore();
   // status bubbles
@@ -592,6 +629,18 @@ export function drawPortrait(ctx, charId, size, override = null) {
       [[-22, '#b8a080'], [22, '#9a8a70']].forEach(([ox, col]) => { ellipse(ctx, ox, 10, 20, 26, col); circle(ctx, ox - 7, 2, 7, '#fff'); circle(ctx, ox + 7, 2, 7, '#fff'); circle(ctx, ox - 7, 2, 3, '#3a3a4a'); circle(ctx, ox + 7, 2, 3, '#3a3a4a'); poly(ctx, [ox - 3, 10, ox + 3, 10, ox, 16], '#e0a040'); });
       break;
     case 'pirate': face('#d9a37a'); poly(ctx, [-34, -14, 0, -36, 34, -14, 0, -20], '#3a2a2a'); circle(ctx, 8, 4, 6, '#3a2a2a'); line(ctx, -20, -6, 24, 10, '#3a2a2a', 2); poly(ctx, [-12, 20, 12, 20, 0, 40], '#8a5a4a'); break;
+    case 'herder': face('#e8b890'); ellipse(ctx, 0, -20, 34, 8, '#c9a86a'); fillRR(ctx, -16, -36, 32, 18, 8, '#c9a86a'); line(ctx, -16, -24, 16, -24, '#e05a5a', 3); circle(ctx, -20, 26, 7, '#ffffff'); circle(ctx, -24, 18, 3, '#ffffff'); circle(ctx, -17, 18, 3, '#ffffff'); break;
+    case 'cartographer': face('#c99a78'); ctx.beginPath(); ctx.arc(0, -6, 26, Math.PI * 1.05, Math.PI * 1.95); ctx.lineWidth = 9; ctx.strokeStyle = '#3a3050'; ctx.stroke();
+      ctx.beginPath(); ctx.arc(-8, 4, 7, 0, Math.PI * 2); ctx.arc(8, 4, 7, 0, Math.PI * 2); ctx.strokeStyle = '#6a8ac0'; ctx.lineWidth = 2.5; ctx.stroke();
+      line(ctx, 22, -30, 32, 0, '#f4ecdc', 3); poly(ctx, [28, -34, 36, -40, 30, -28], '#6a8ac0'); break;
+    case 'gale': {
+      const b = Math.sin(Date.now() / 900) * 2;
+      ctx.globalAlpha = 0.9; cloud(ctx, -33, 16 + b, 0.7, '#e8eeff'); ctx.globalAlpha = 1;
+      line(ctx, -14, 2 + b, -4, 2 + b, '#5a6a9a', 2.5); line(ctx, 4, 2 + b, 14, 2 + b, '#5a6a9a', 2.5);
+      ellipse(ctx, 0, 14 + b, 4, 3, '#8a9ac8');
+      ctx.strokeStyle = '#a8b8e0'; ctx.lineWidth = 2; for (let i = 0; i < 3; i++) { ctx.beginPath(); ctx.arc(30, -30 + i * 9, 6 + i * 2, Math.PI * 0.2, Math.PI * 1.2); ctx.stroke(); }
+      break;
+    }
     case 'trader': face('#f2c6a0'); fillRR(ctx, -26, -28, 52, 12, 4, c.color); break;
     default: face('#f2c6a0');
   }

@@ -29,6 +29,7 @@ export function currentQuest(charId) {
   for (const qid of c.quests || []) {
     if (G.state.quests.done[qid]) continue;
     const q = DATA.QUESTS[qid];
+    if (q.after === 'lit' && !G.state.story.lit) return null;
     // Quests that depend on clues stay hidden until you know them.
     if (q.needs.some(n => n.clue && !G.state.disc.clues[n.clue])) return null;
     return qid;

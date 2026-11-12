@@ -13,6 +13,18 @@
 //   - the food's colour tints the product (pink wool, blue eggs…)
 //   - the food's first effects pass into the product
 //   - golden food => Golden product, glowing food => Glowing product
+//
+//  ANIMAL_TRAITS are inherited genes. Babies get each parent's
+//  traits with a good chance, and sometimes a brand-new one
+//  (js/animals.js → breedAnimals). Bought animals occasionally
+//  arrive with one. An animal holds at most 3.
+//    value:    flat bonus to product value
+//    valueMult: multiplier on product value
+//    faster:   days removed from `every` (never below 1)
+//    steady:   happiness doesn't drop on hungry days
+//    doubles:  chance to make two products
+//    effect:   extra effect added to products
+//    fertile:  extra chance to have babies
 // =============================================================
 
 export const ANIMALS = {
@@ -52,4 +64,33 @@ export const ANIMALS = {
     desc: 'Digs up little treasures in the soil. Only found, never sold.',
     patterns: ['plain', 'floppy', 'spotted', 'windswept'],
   },
+  puff_bunny: {
+    name: 'Puff Bunny', product: 'Fluff', productIcon: 'puff', every: 2, home: 'coop',
+    baseHue: 30, baseLight: 92, productEffects: ['gentle'], productValue: 12, price: 80,
+    desc: 'Sheds the softest fluff in the sky. Mostly when hugged.',
+    patterns: ['plain', 'lop', 'patched', 'cottontail', 'starry'],
+  },
+  drift_duck: {
+    name: 'Drift Duck', product: 'Down', productIcon: 'feather', every: 2, home: 'coop',
+    baseHue: 50, baseLight: 80, productEffects: ['floaty'], productValue: 13, price: 90,
+    desc: 'Paddles through clouds as if they were ponds.',
+    patterns: ['plain', 'mallard', 'speckled', 'crested', 'rainbow'],
+  },
+  cumulus_cow: {
+    name: 'Cumulus Cow', product: 'Cream', productIcon: 'bottle', every: 2, home: 'barn',
+    baseHue: 30, baseLight: 90, productEffects: ['rich'], productValue: 22, price: 180,
+    desc: 'A big, gentle cloud with hooves. Her cream is famous.',
+    patterns: ['plain', 'spotted', 'belted', 'stormcloud', 'sunset'],
+  },
+};
+
+export const ANIMAL_TRAITS = {
+  fluffy:   { name: 'Extra Fluffy', desc: 'Products are worth more.', value: 6, mutate: 3 },
+  big:      { name: 'Big-Boned',    desc: 'Products are worth 25% more.', valueMult: 1.25, mutate: 2 },
+  quick:    { name: 'Quick',        desc: 'Makes products a day sooner.', faster: 1, mutate: 2 },
+  steady:   { name: 'Steady',       desc: 'Stays happy even on hungry days.', steady: true, mutate: 3 },
+  lucky:    { name: 'Lucky',        desc: 'Sometimes makes two products at once.', doubles: 0.25, mutate: 2 },
+  sparkly:  { name: 'Sparkly',      desc: 'Products sparkle.', effect: 'sparkling', value: 4, mutate: 1 },
+  musical:  { name: 'Musical',      desc: 'Hums while it works. Products are musical.', effect: 'musical', value: 4, mutate: 1 },
+  fertile:  { name: 'Family-Minded', desc: 'More likely to have babies.', fertile: 0.1, mutate: 2 },
 };

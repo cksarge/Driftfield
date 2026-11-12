@@ -105,8 +105,22 @@ function almanac(body) {
         h('span', {}, t.climates.map(cl => DATA.CLIMATES[cl].name).join('/')),
         t.rare.map(r => h('span', { class: 'rare' }, DATA.RARE_TRAITS[r].name))),
       c.parents ? h('div', { class: 'small muted' }, 'Parents: ' + c.parents.map(p => (getCrop(p) || { name: '?' }).name).join(' × ')) : null,
+      c.parents && c.gen > 1 ? h('details', { class: 'famtree small' }, h('summary', {}, '🌳 Family tree'), h('ul', {}, familyTree(id, 0))) : null,
       h('div', { class: 'small muted' }, `Worth ${cropValue(c)} 🐚 each`));
   })));
+}
+
+/** One crop and its ancestors as nested list items (stops at base crops or 6 generations up). */
+function familyTree(id, depth, seen = new Set()) {
+  const c = getCrop(id);
+  if (!c) return h('li', {}, '?');
+  const label = h('span', {}, h('img', { src: iconURL(itemInfo('crop:' + id), 20), alt: '' }), ' ', c.name,
+    h('span', { class: 'muted' }, c.hybrid ? ` · gen ${c.gen}` : c.legendary ? ' · legendary' : ' · base'));
+  if (!c.parents || depth >= 6 || seen.has(id)) return h('li', {}, label);
+  seen.add(id);
+  const [a, b] = c.parents;
+  const kids = a === b ? [h('li', { class: 'muted' }, 'a fertilizer sport of:'), familyTree(a, depth + 1, seen)] : [familyTree(a, depth + 1, seen), familyTree(b, depth + 1, seen)];
+  return h('li', {}, label, h('ul', {}, kids));
 }
 
 // ---------------- Discovery Log ----------------
@@ -116,7 +130,7 @@ function discoveries(body) {
     const pct = total ? Math.round((cur / total) * 100) : null;
     return h('div', { class: 'logrow' }, h('b', {}, label), h('div', { class: 'bar' }, h('div', { style: `width:${pct ?? 100}%` })), h('span', { class: 'small' }, total ? `${cur}/${total} (${pct}%)` : `${cur} ${note || ''}`));
   };
-  const animalTotal = Object.values(DATA.ANIMALS).reduce((s, a) => s + 1 + a.patterns.length, 0);
+  const animalTotal = Object.values(DATA.ANIMALS).reduce((s, a) => s + 1 + a.patterns.length, 0) + Object.keys(DATA.ANIMAL_TRAITS).length;
   const hiddenRecipes = Object.values(DATA.RECIPES).filter(r => !r.known).length;
   body.append(h('p', {}, `Total discoveries: ${totalDiscoveries()}`));
   body.append(h('div', { class: 'log' },
@@ -124,7 +138,7 @@ function discoveries(body) {
     cat('Hybrid varieties', Object.keys(d.crops).filter(id => G.state.reg.crops[id]).length, 0, 'bred, endless more to find'),
     cat('Effects', Object.keys(d.effects).length, Object.keys(DATA.EFFECTS).length),
     cat('Mixed products', Object.keys(d.mixes).length, 0, 'invented, thousands possible'),
-    cat('Animals & coats', Object.keys(d.animals).length, animalTotal),
+    cat('Animals, coats & traits', Object.keys(d.animals).length, animalTotal),
     cat('Islands visited', Object.keys(d.islands).length, Object.keys(DATA.ISLANDS).length),
     cat('Zones', Object.keys(d.zones).length, Object.keys(DATA.ZONES).length),
     cat('Characters', Object.keys(d.characters).length, Object.keys(DATA.CHARACTERS).length),
@@ -189,7 +203,13 @@ function map(body) {
 function beacon(body) {
   const s = G.state;
   body.append(h('div', { class: 'stages' }, DATA.BEACON_STAGES.map((st, i) => h('div', { class: 'stage' + (i < s.story.stage ? ' done' : i === s.story.stage ? ' now' : '') }, `${i < s.story.stage ? '✓' : i + 1}. ${st.title}`))));
-  if (beaconDone()) body.append(h('div', { class: 'quest main' }, h('b', {}, 'The Great Sky Beacon shines!'), h('p', { class: 'small' }, 'The sky is calm. Keep exploring: endless islands, crops and mixes are still out there.')));
+  if (beaconDone()) {
+    body.append(h('div', { class: 'quest main' }, h('b', {}, 'The Great Sky Beacon shines!'), h('p', { class: 'small' }, 'The sky is calm. Keep exploring: endless islands, crops and mixes are still out there.')));
+    const ch = DATA.CHAPTER_TWO;
+    if (s.story.ch2) body.append(h('div', { class: 'quest main' }, h('b', {}, `Chapter Two: ${ch.title}`),
+      h('p', { class: 'small' }, s.story.epilogue ? 'The Hundred-Year Gale is fast asleep beside its garden.' : 'Visit Galehollow when it drifts by, and help the Hundred-Year Gale get back to sleep.'),
+      h('ul', { class: 'small' }, ch.quests.map(q => h('li', {}, `${s.quests.done[q] ? '✓' : s.quests.active[q] ? '…' : '○'} ${DATA.QUESTS[q].title}`)))));
+  }
   else {
     const st = currentStage();
     const ok = canFulfill(st.needs);

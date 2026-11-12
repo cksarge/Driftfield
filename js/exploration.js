@@ -26,6 +26,7 @@ export function nearbyIslands() {
 function islandOpen(id) {
   const I = DATA.ISLANDS[id], s = G.state;
   if (I.seasons && !I.seasons.includes(s.time.season)) return false;
+  if (I.after === 'lit' && !s.story.lit) return false;
   return I.zones === '*' || I.zones.includes('*') || I.zones.includes(s.nav.zone);
 }
 

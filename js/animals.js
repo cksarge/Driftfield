@@ -6,6 +6,8 @@
 //    • food effects pass into the product ("Sweet Milk")
 //    • Golden or Glowing food → Golden/Glowing products (worth more!)
 //  Sky bees live in beehives and flavour honey with nearby flowers.
+//  Animals also carry inherited traits (data/animals.js ANIMAL_TRAITS)
+//  that change how much and how often they produce.
 // =============================================================
 
 import { G, discover } from './state.js';
@@ -13,7 +15,7 @@ import { DATA } from '../data/index.js';
 import { itemInfo, registerItem, addItem, removeItem, count, getCrop } from './items.js';
 import { allTiles, isLand, objectAt, objectDef } from './island.js';
 import { hasBuff } from './mixing.js';
-import { chance, pick, rand, mixHue, hueName, hexToHue, hueToHex, uid, clamp, mixHex } from './utils.js';
+import { chance, pick, rand, mixHue, hueName, hexToHue, hueToHex, uid, clamp, mixHex, weightedPick } from './utils.js';
 import { emit } from './events.js';
 
 const NAMES = ['Puff', 'Nimbus', 'Biscuit', 'Clover', 'Maple', 'Mochi', 'Pip', 'Wisp', 'Bramble', 'Dumpling', 'Sprout', 'Hazel',
@@ -39,10 +41,12 @@ export function spawnAnimal(species, x, y, opts = {}) {
     hue: opts.hue ?? def.baseHue, light: opts.light ?? def.baseLight, pattern: opts.pattern || 'plain',
     x: x + 0.5, y: y + 0.5, tx: x + 0.5, ty: y + 0.5,
     fed: null, happy: 3, timer: 0, ready: null, baby: opts.baby || 0,
+    traits: (opts.traits || []).slice(0, 3),
   };
   G.state.animals.push(a);
   discover('animals', species, def.name);
   discover('animals', species + ':' + a.pattern, `${def.name} (${a.pattern})`);
+  a.traits.forEach(t => discover('animals', 'trait:' + t, DATA.ANIMAL_TRAITS[t].name));
   emit('animal:added', a);
   return a;
 }
@@ -64,7 +68,8 @@ export function placeAnimalFromBag(species, x, y) {
   if (!isLand(x, y)) return 'Animals need solid ground.';
   if (!hasRoomFor(species)) return `No room! Build another ${DATA.BUILDINGS[def.home].name}.`;
   removeItem('animal:' + species, 1);
-  spawnAnimal(species, x, y);
+  // Now and then a new animal arrives with a trait of its own.
+  spawnAnimal(species, x, y, { traits: chance(0.25) ? [randomTrait()] : [] });
   return '';
 }
 
@@ -95,17 +100,29 @@ export function feed(animal, key) {
 export function collect(animal) {
   if (!animal.ready) return null;
   const key = animal.ready;
-  addItem(key, 1);
-  animal.ready = null;
+  addItem(key, animal.readyCount || 1);
+  animal.ready = null; animal.readyCount = 1;
   emit('animal:collected', { animal, key });
   return key;
 }
 
 // ---------------- products ----------------
-const TINTED = ['Wool', 'Egg', 'Silk'];
+const TINTED = ['Wool', 'Egg', 'Silk', 'Fluff', 'Down'];
+
+const traitDefs = (traits) => (traits || []).map(t => DATA.ANIMAL_TRAITS[t]).filter(Boolean);
+
+/** Days between products, after Quick traits. */
+export const productEvery = (a) => Math.max(1, DATA.ANIMALS[a.species].every - traitDefs(a.traits).reduce((s, t) => s + (t.faster || 0), 0));
+
+/** A random trait, weighted by how often each one mutates. */
+function randomTrait(exclude = []) {
+  const w = {};
+  Object.entries(DATA.ANIMAL_TRAITS).forEach(([id, t]) => { if (!exclude.includes(id)) w[id] = t.mutate || 1; });
+  return weightedPick(w);
+}
 
 /** Build the product an animal makes from what it ate. */
-export function makeProduct(species, food, happy = 3) {
+export function makeProduct(species, food, happy = 3, traits = []) {
   const def = DATA.ANIMALS[species];
   if (species === 'breeze_pup') {
     const pool = hasBuff('lucky') || (food && food.effects.includes('lucky'))
@@ -116,6 +133,8 @@ export function makeProduct(species, food, happy = 3) {
   const fx = food ? food.effects : [];
   const rare = food ? food.rare : [];
   fx.slice(0, 2).forEach(e => { if (!effects.includes(e) && effects.length < 3) effects.push(e); });
+  const T = traitDefs(traits);
+  T.forEach(t => { if (t.effect && !effects.includes(t.effect) && effects.length < 4) effects.push(t.effect); });
 
   let adj = '', color = hueToHex(def.baseHue, 30, def.baseLight), bonus = 0;
   const golden = fx.includes('golden') || rare.includes('golden');
@@ -128,10 +147,13 @@ export function makeProduct(species, food, happy = 3) {
   } else if (fx.length) {
     adj = DATA.EFFECTS[fx[0]].name;
   }
-  const value = Math.round(def.productValue + effects.reduce((s, e) => s + DATA.EFFECTS[e].value, 0) * 0.5 + bonus + (happy >= 5 ? 4 : 0));
-  const name = (adj ? adj + ' ' : '') + def.product;
+  bonus += T.reduce((s, t) => s + (t.value || 0), 0);
+  const mult = T.reduce((m, t) => m * (t.valueMult || 1), 1);
+  const value = Math.round((def.productValue + effects.reduce((s, e) => s + DATA.EFFECTS[e].value, 0) * 0.5 + bonus + (happy >= 5 ? 4 : 0)) * mult);
+  let name = (adj ? adj + ' ' : '') + def.product;
+  if (mult > 1 || T.some(t => t.value >= 6)) name = 'Fine ' + name;
   const key = registerItem({
-    kind: 'product', name, effects: effects.slice(0, 3), color, value,
+    kind: 'product', name, effects: effects.slice(0, 4), color, value,
     tags: ['product', def.product.toLowerCase(), ...(def.product === 'Honey' ? ['honey'] : [])],
     icon: { shape: def.productIcon, color }, desc: `Made by your ${def.name.toLowerCase()}.`,
   });
@@ -180,11 +202,16 @@ export function animalsOvernight() {
   for (const a of G.state.animals) {
     const def = DATA.ANIMALS[a.species];
     if (a.baby > 0) { a.baby--; a.fed = null; continue; }
+    const T = traitDefs(a.traits);
     if (a.fed) {
       a.timer++;
       if (hasBuff('musical') || hasBuff('calming') || hasBuff('cozy')) a.happy = Math.min(5, a.happy + 1);
-      if (a.timer >= def.every && !a.ready) { a.ready = makeProduct(a.species, a.fed, a.happy); a.timer = 0; }
-    } else {
+      if (a.timer >= productEvery(a) && !a.ready) {
+        a.ready = makeProduct(a.species, a.fed, a.happy, a.traits);
+        a.readyCount = T.some(t => t.doubles && chance(t.doubles)) ? 2 : 1;
+        a.timer = 0;
+      }
+    } else if (!T.some(t => t.steady)) {
       a.happy = Math.max(0, a.happy - 1);
     }
     a.lastFed = !!a.fed;
@@ -203,18 +230,31 @@ function breedAnimals() {
   G.state.animals.forEach(a => { if (!a.baby && a.lastFed && a.happy >= 3) (bySpecies[a.species] = bySpecies[a.species] || []).push(a); });
   for (const [sp, list] of Object.entries(bySpecies)) {
     if (list.length < 2 || !hasRoomFor(sp)) continue;
-    if (!chance(0.12 + (hasBuff('musical') ? 0.08 : 0))) continue;
     const [p1, p2] = [list[0], list[1 + Math.floor(Math.random() * (list.length - 1))]];
+    const fertile = [...traitDefs(p1.traits), ...traitDefs(p2.traits)].reduce((s, t) => s + (t.fertile || 0), 0);
+    if (!chance(0.12 + fertile + (hasBuff('musical') ? 0.08 : 0))) continue;
     const def = DATA.ANIMALS[sp];
     let hue = (mixHue(p1.hue, p2.hue) + rand(-20, 20) + 360) % 360;
     if (chance(0.1)) hue = rand(0, 360);
     let pattern = chance(0.5) ? p1.pattern : p2.pattern;
     if (chance(0.15)) pattern = pick(def.patterns);
     const light = clamp((p1.light + p2.light) / 2 + rand(-10, 10), 55, 97);
+    const traits = inheritTraits(p1.traits || [], p2.traits || []);
     const t = randomFreeTile();
-    const baby = spawnAnimal(sp, t[0], t[1], { hue, light, pattern, baby: 3 });
+    const baby = spawnAnimal(sp, t[0], t[1], { hue, light, pattern, baby: 3, traits: traits.list });
+    baby.parents = [p1.name, p2.name];
+    baby.newTrait = traits.mutated;
     emit('animal:born', { animal: baby, parents: [p1, p2] });
   }
+}
+
+/** Each parent trait passes on 50% of the time (85% if both have it), plus a small mutation chance. */
+export function inheritTraits(a, b) {
+  const list = [];
+  [...new Set([...a, ...b])].forEach(t => { if (DATA.ANIMAL_TRAITS[t] && chance(a.includes(t) && b.includes(t) ? 0.85 : 0.5)) list.push(t); });
+  let mutated = null;
+  if (list.length < 3 && chance(0.12 + (hasBuff('lucky') ? 0.08 : 0))) { mutated = randomTrait(list); list.push(mutated); }
+  return { list: list.slice(0, 3), mutated };
 }
 
 export function collectHive(o) {

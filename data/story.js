@@ -51,11 +51,29 @@ export const CLUES = {
   fern_pollen:        { core: false, title: 'Glowing Pollen', text: 'Fern says the Beacon once shed glowing pollen across the sky. A flower bred with glow, crystal and song might carry the same light.' },
   tiny_door:          { core: false, title: 'A Very Small Letter', text: '"Dear Big Folk. We saw a pirate swap the shiny rock at the Beacon twenty years ago. He looked sad about it. We kept quiet because we are mice. Sorry. —The Glade Mice"' },
   sock_secret:        { core: false, title: 'The Truth About Socks', text: 'Lost socks are carried off by tiny updrafts that form only near laundry. The Sock King has documented 14,000 cases. This has nothing to do with the Beacon. It just felt important.' },
+  ghost_log:          { core: false, title: 'A Page from the Ghost Ship', text: '"Day 1: set sail to find where the Gale sleeps. Day 40: found it. It is not angry. It is only tired. Day 41: we are being very, very quiet."' },
+  marlo_gap:          { core: false, title: 'The Gap in the Chart', text: 'Marlo\'s chart has a blank space right beneath the Beacon, marked only with a tiny drawing of a sleeping cloud.' },
+  brindle_letter:     { core: false, title: 'Brindle\'s Letter', text: '"To the Glade Mice: I know you saw. Thank you for keeping quiet, but you shouldn\'t have had to. It\'s been put right now. Biscuits enclosed. —R.B."' },
+  gale_song:          { core: false, title: 'The Gale\'s Song', text: 'Hummed back to you by an enormous, sleepy wind: the Beacon\'s low, kind note, with a little extra on the end that sounds like a yawn.' },
   brindle_confession: { core: true, title: 'The Captain\'s Confession', text: 'Captain Brindle swapped the Beacon\'s Tuning Crystal for glass twenty years ago. The fake cracked slowly, the song faded, and the Gale woke. He kept the real crystal all this time, too ashamed to return it. Now it\'s yours to return.' },
 };
 
 // Shown when every `core` clue is found.
 export const TRUTH = 'The storm wasn\'t bad luck. A crystal was taken, a song went quiet, and a sleeping gale woke up. But a crystal can be returned. A song can be sung again. And an island, it turns out, can be rebuilt.';
+
+// After the Beacon is lit, a second chapter opens: the Hundred-Year Gale
+// itself drifts up to Galehollow (data/islands.js, after: 'lit') and asks
+// for help getting back to sleep (quests marked after: 'lit').
+export const CHAPTER_TWO = {
+  title: 'The Gale\'s Lullaby',
+  hint: ['Did you feel that breeze? Warm, slow… like something enormous yawning.', 'There\'s a new island drifting near us. Galehollow. I think someone there wants to meet you.'],
+  quests: ['gale_lullaby', 'gale_feathers', 'gale_garden'],
+};
+export const EPILOGUE = [
+  'Far below the clouds, the Hundred-Year Gale curls up beside its little garden and falls fast asleep.',
+  'The Beacon hums. The Gale snores, very softly. The whole sky seems to relax.',
+  'Wendell spins once, slowly, and points nowhere in particular. "No wind to follow," he says. "We can go wherever we like."',
+];
 
 // Shown after the Beacon is lit, then the game continues (endless mode).
 export const ENDING = [

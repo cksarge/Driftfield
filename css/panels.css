@@ -104,7 +104,7 @@ body.on-title #toasts { z-index: 76; }
 .clue { background: #fdf9ee; border-left: 4px solid var(--wood); border-radius: 8px; padding: 8px 12px; margin: 6px 0; }
 
 /* ---- journal ---- */
-.almanac { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; }
+.almanac { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px; align-items: start; }
 .acard { background: #fff; border: 2px solid #f0e6d6; border-radius: 14px; padding: 8px 10px; }
 .acard.legend { border-color: var(--gold); background: #fffbe8; }
 .acard.secret { background: #f4f0ea; color: var(--ink-soft); }
@@ -180,3 +180,13 @@ svg.map .zone.can circle { animation: mappulse 1.4s ease-in-out infinite; }
   .recipes, .almanac, .spots { grid-template-columns: 1fr; }
   .title-box h1 { font-size: 2.3rem; }
 }
+
+/* Animal traits */
+.chip.trait { display: inline-block; margin: 2px 4px 2px 0; padding: 2px 9px; border-radius: 999px; background: #f0e6ff; font-weight: 700; font-size: 0.78rem; }
+
+/* Seed Almanac family tree */
+.famtree { margin-top: 4px; }
+.famtree summary { cursor: pointer; font-weight: 700; color: var(--wood-dark); }
+.famtree ul { list-style: none; margin: 2px 0 0; padding-left: 14px; border-left: 2px dashed #eadfcc; }
+.famtree li { margin: 3px 0; overflow-wrap: anywhere; }
+.famtree img { width: 20px; height: 20px; vertical-align: middle; }

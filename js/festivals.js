@@ -15,6 +15,8 @@ export function todayFestival() {
   return null;
 }
 
+const todayContest = () => { const id = todayFestival(); return id ? DATA.FESTIVALS[id].contest : null; };
+
 const recKey = (id) => `y${G.state.time.year}-${id}`;
 export const festivalRecord = (id) => G.state.festivals[recKey(id)] || {};
 
@@ -38,12 +40,22 @@ export function contestEntries(id) {
     if (f.contest === 'crop') return i.kind === 'crop';
     if (f.contest === 'mix') return i.kind === 'mix';
     if (f.contest === 'dye') return i.kind === 'dye';
+    if (f.contest === 'product') return i.kind === 'product';
+    if (f.contest === 'giant') return i.kind === 'crop';
+    if (f.contest === 'hybrid') return i.kind === 'crop' && i.crop && (i.crop.hybrid || i.crop.legendary);
     return false;
   }).map(itemInfo);
 }
 
 export function entryScore(key) {
   const i = itemInfo(key);
+  if (i.kind === 'crop' && i.crop && todayContest() === 'giant') {
+    const t = i.crop.traits;
+    return Math.round(t.size * 18 + t.yield * 3 + (i.crop.legendary ? 10 : 0));
+  }
+  if (i.kind === 'crop' && i.crop && todayContest() === 'hybrid') {
+    return Math.round(10 + (i.crop.gen || 0) * 8 + i.crop.traits.rare.length * 12 + (i.crop.legendary ? 30 : 0));
+  }
   let s = i.value || 0;
   if (i.effects) s += i.effects.length * 8;
   if (i.kind === 'dye') {

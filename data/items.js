@@ -61,5 +61,6 @@ export default {
   map_fragment:   { name: 'Old Chart',        kind: 'special', value: 0,  icon: { shape: 'scroll', color: '#e8d8a8' }, desc: 'A torn sky chart.', noSell: true },
   festival_ribbon:{ name: 'Festival Ribbon',  kind: 'special', value: 25, icon: { shape: 'star', color: '#ff9ac0' }, desc: 'Proof of a contest well won.' },
   glider_wing:    { name: 'Glider Wing Kit',  kind: 'special', value: 40, icon: { shape: 'feather', color: '#ffe0a0' }, desc: 'Use at the workshop to upgrade your glider.' },
+  gale_feather:   { name: 'Gale Feather',     kind: 'special', value: 30, icon: { shape: 'feather', color: '#c8d4f0' }, desc: 'A long silver feather left behind when the Hundred-Year Gale sighs.', mix: { adds: ['sleepy'], transforms: { stormy: 'calming', energizing: 'dreamy' } } },
   beacon_key:     { name: 'Keeper\'s Key',    kind: 'special', value: 0,  icon: { shape: 'key', color: '#f0c050' }, desc: 'An old brass key with an owl on it.', noSell: true },
 };

@@ -51,6 +51,7 @@ export function rollEvent(night) {
     if (e.zones !== '*' && !e.zones.includes(s.nav.zone)) continue;
     if (e.weather && s.weather.today !== e.weather) continue;
     if (e.once && s.eventsSeen[id]) continue;
+    if (e.after === 'lit' && !s.story.lit) continue;
     if (!chance(e.chance)) continue;
     s.eventsSeen[id] = (s.eventsSeen[id] || 0) + 1;
     Object.entries(e.give || {}).forEach(([k, n]) => giveKey(k, n));

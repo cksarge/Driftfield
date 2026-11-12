@@ -8,6 +8,8 @@
 //    { mix: { base?, effects: [...] }, qty }  a mix with ALL those effects
 //    { crop: { hybrid?, rare?:[...] }, qty }  produce matching traits
 //    { clue: 'id' }                           clue known (not consumed)
+//  after: 'lit'   (optional) only offered once the Beacon is lit
+//  final: true    (optional) finishing it ends the post-Beacon chapter
 //  reward:
 //    coins, items: { key: qty }, unlock: ['bp:x' | 'recipe:y'],
 //    clue: 'id', say: 'what the character says on completion'
@@ -79,6 +81,54 @@ export default {
     desc: 'You found the Rustbolt manifest signed "R.B." and the owls\' warning. Ask Brindle about it.',
     needs: [{ clue: 'wreck_manifest' }, { clue: 'owl_warning' }],
     reward: { items: { tuning_crystal: 1 }, clue: 'brindle_confession', say: 'I took it. Twenty years ago. I swapped the Beacon\'s crystal for a glass fake and sold the fake story as treasure. The fake cracked, the song faded, and the Gale woke up. Your island… that was me. I\'m sorry. Here. Put it back where it belongs.' },
+  },
+  brindle_amends: {
+    title: 'Tea with the Owls', giver: 'brindle', after: 'lit',
+    desc: 'Brindle wants to apologise to Hoot and Tawny properly. He needs a calming tea to bring, and some moon dew as a peace offering.',
+    needs: [{ mix: { base: 'tea', effects: ['calming'] }, qty: 1 }, { item: 'moon_dew', qty: 3 }],
+    reward: { coins: 150, items: { 'deco:pirate_chest': 1 }, clue: 'brindle_letter', say: 'They hooted at me for an hour. Then Tawny poured the tea. I think… I think we\'re alright. Thank you, friend.' },
+  },
+  juniper_fluff: {
+    title: 'Fluff for the Nest', giver: 'juniper',
+    desc: 'Juniper is lining a nursery barn and needs 3 Fluff from Puff Bunnies.',
+    needs: [{ tag: 'fluff', qty: 3 }],
+    reward: { coins: 90, items: { 'animal:drift_duck': 1 }, say: 'So soft! Take this duckling. She\'s got a Quick look about her.' },
+  },
+  juniper_cream: {
+    title: 'The Cream of the Crop', giver: 'juniper',
+    desc: 'Juniper wants 2 Cream from a Cumulus Cow for the Honey Fair pies.',
+    needs: [{ tag: 'cream', qty: 2 }],
+    reward: { coins: 220, items: { feather: 6, 'deco:picnic': 1 }, say: 'Perfect. Pies for everyone! Come to the Honey Fair in summer, you\'ll see.' },
+  },
+  marlo_samples: {
+    title: 'Samples from Every Sky', giver: 'marlo',
+    desc: 'Marlo wants proof of three different zones: storm glass, frost shards and ember coal.',
+    needs: [{ item: 'storm_glass', qty: 2 }, { item: 'frost_shard', qty: 2 }, { item: 'ember_coal', qty: 2 }],
+    reward: { coins: 160, items: { glider_wing: 1, map_fragment: 1 }, say: 'Wonderful. The chart is filling in. Take this wing kit: you\'ll need range to reach the edges.' },
+  },
+  marlo_stars: {
+    title: 'Stars on the Chart', giver: 'marlo',
+    desc: 'Marlo wants a crop with the Starry trait to mark north on the new chart.',
+    needs: [{ crop: { rare: ['starry'] }, qty: 1 }],
+    reward: { coins: 250, unlock: ['recipe:telescope'], clue: 'marlo_gap', say: 'North, marked in starlight. Look here, though: below the Beacon there\'s a gap no wind has ever charted.' },
+  },
+  gale_lullaby: {
+    title: 'A Lullaby for the Gale', giver: 'gale', after: 'lit',
+    desc: 'The Gale can\'t get back to sleep. Mix something both Musical and Dreamy for it.',
+    needs: [{ mix: { effects: ['musical', 'dreamy'] }, qty: 1 }],
+    reward: { coins: 200, items: { gale_feather: 2 }, clue: 'gale_song', say: 'Mmm. That\'s nearly the Beacon\'s song. Nearly. Hum it again sometime?' },
+  },
+  gale_feathers: {
+    title: 'What the Wind Carried', giver: 'gale', after: 'lit',
+    desc: 'The Gale drops silver feathers when it sighs. Bring 5 back and it will try to remember where it carried things.',
+    needs: [{ item: 'gale_feather', qty: 5 }],
+    reward: { items: { 'land:pebble': 2, old_gear: 4, 'seed:random_hybrid': 1 }, say: 'I remember now. Bits of your island are everywhere: I scattered them like seeds. Here are a few I kept close.' },
+  },
+  gale_garden: {
+    title: 'A Garden to Sleep Beside', giver: 'gale', after: 'lit', final: true,
+    desc: 'The Gale wants a legendary crop to drift beside while it sleeps, and 3 floating crops to keep it company.',
+    needs: [{ crop: { legendary: true }, qty: 1 }, { crop: { rare: ['floating'] }, qty: 3 }],
+    reward: { coins: 600, items: { 'deco:gale_chime': 1 }, say: 'There. That\'s… very nice. I think I could sleep a hundred years beside this. Goodnight, little farmer.' },
   },
 };
 

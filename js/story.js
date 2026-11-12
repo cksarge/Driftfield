@@ -5,6 +5,7 @@
 import { G, discover } from './state.js';
 import { DATA } from '../data/index.js';
 import { canFulfill, consumeNeeds } from './needs.js';
+import { spawnPassingIsland } from './exploration.js';
 import { on, emit } from './events.js';
 
 export const beaconStage = () => G.state.story.stage;
@@ -34,11 +35,29 @@ export function beaconGlow() {
   return s.story.stage * 0.08;      // faint glimmers as you repair it
 }
 
+// ---------------- Chapter Two: the Gale's Lullaby ----------------
+export const chapterTwoOpen = () => !!(G.state.story.lit && G.state.story.ch2);
+export const chapterTwoDone = () => !!G.state.story.epilogue;
+
 export const coreClues = () => Object.entries(DATA.CLUES).filter(([, c]) => c.core).map(([id]) => id);
 export const truthKnown = () => coreClues().every(id => G.state.disc.clues[id]);
 
 /** Wire story listeners (called once at boot). */
 export function initStory() {
+  // The morning after the Beacon is lit, the Gale's island drifts up.
+  on('day:start', () => {
+    const st = G.state.story;
+    if (!st.lit || st.ch2) return;
+    st.ch2 = true;
+    spawnPassingIsland('galehollow', 1);
+    emit('chapter2:start');
+  });
+  on('quest:done', (qid) => {
+    if (!DATA.QUESTS[qid].final || G.state.story.epilogue) return;
+    G.state.story.epilogue = true;
+    discover('secrets', 'epilogue', 'The Gale sleeps');
+    emit('epilogue');
+  });
   on('clue:found', (id) => {
     const c = DATA.CLUES[id];
     if (!c) return;

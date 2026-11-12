@@ -23,7 +23,8 @@ export default {
     sells: [
       { key: 'seed:sky_wheat', price: 8, stock: 12 }, { key: 'seed:drift_carrot', price: 5, stock: 12 },
       { key: 'seed:breeze_bean', price: 6, stock: 10 }, { key: 'seed:dawn_tomato', price: 7, stock: 10 },
-      { key: 'seed:tea_bush', price: 9, stock: 8 }, { key: 'jar', price: 3, stock: 20 },
+      { key: 'seed:tea_bush', price: 9, stock: 8 }, { key: 'seed:snow_pea', price: 9, stock: 8 },
+      { key: 'jar', price: 3, stock: 20 },
       { key: 'wood', price: 3, stock: 30 }, { key: 'stone', price: 3, stock: 30 }, { key: 'compost', price: 3, stock: 10 },
     ],
   },
@@ -35,6 +36,7 @@ export default {
     sells: [
       { key: 'seed:honey_blossom', price: 8, stock: 10 }, { key: 'seed:star_lily', price: 16, stock: 4 },
       { key: 'animal:sky_bee', price: 90, stock: 2 }, { key: 'deco:flower_bed', price: 40, stock: 2 },
+      { key: 'seed:velvet_rose', price: 22, stock: 4 }, { key: 'seed:glimmer_grape', price: 16, stock: 6 },
     ],
   },
   frostline: {
@@ -45,6 +47,7 @@ export default {
     sells: [
       { key: 'seed:frost_berry', price: 12, stock: 10 }, { key: 'seed:moon_melon', price: 20, stock: 4 },
       { key: 'seed:mist_mint', price: 7, stock: 10 }, { key: 'frost_shard', price: 18, stock: 5 },
+      { key: 'seed:puff_pumpkin', price: 15, stock: 4 },
       { key: 'animal:mist_moth', price: 160, stock: 1 },
     ],
   },
@@ -56,7 +59,7 @@ export default {
     sells: [
       { key: 'seed:ember_chili', price: 12, stock: 10 }, { key: 'seed:sunfruit', price: 14, stock: 8 },
       { key: 'ember_coal', price: 16, stock: 6 }, { key: 'sunstone', price: 24, stock: 3 },
-      { key: 'seed:storm_pepper', price: 18, stock: 5 },
+      { key: 'seed:storm_pepper', price: 18, stock: 5 }, { key: 'seed:cinder_squash', price: 18, stock: 5 },
     ],
   },
   wonders: {
@@ -75,7 +78,9 @@ export default {
     likes: { kinds: { product: 1.4 }, bases: { feed: 1.2 } },
     sells: [
       { key: 'animal:cloud_sheep', price: 120, stock: 2 }, { key: 'animal:float_goat', price: 140, stock: 2 },
-      { key: 'animal:puff_hen', price: 60, stock: 3 }, { key: 'fiber', price: 2, stock: 30 },
+      { key: 'animal:puff_hen', price: 60, stock: 3 }, { key: 'animal:puff_bunny', price: 80, stock: 2 },
+      { key: 'animal:drift_duck', price: 90, stock: 2 }, { key: 'animal:cumulus_cow', price: 180, stock: 1 },
+      { key: 'fiber', price: 2, stock: 30 },
     ],
   },
   rainbow: {

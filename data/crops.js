@@ -159,6 +159,40 @@ export const CROPS = {
     desc: 'Its skin ripples with green and violet light.',
     traits: { hue: 290, size: 2, flavor: 'sweet', growth: 5, climates: ['cold', 'misty'], yield: 2, rare: ['shimmering'] },
   },
+  glimmer_grape: {
+    name: 'Glimmer Grape', shape: 'bush', seedPrice: 16,
+    desc: 'Clusters that catch the light like tiny lanterns.',
+    traits: { hue: 275, size: 1, flavor: 'sweet', growth: 4, climates: ['misty', 'temperate'], yield: 4, rare: [] },
+    mix: { transforms: { sour: 'fizzy' } },
+  },
+  cinder_squash: {
+    name: 'Cinder Squash', shape: 'melon', seedPrice: 18,
+    desc: 'Its rind is warm and smells faintly of toast.',
+    traits: { hue: 22, size: 4, flavor: 'savory', growth: 5, climates: ['warm'], yield: 2, rare: [] },
+    mix: { transforms: { frosty: 'cozy' } },
+  },
+  snow_pea: {
+    name: 'Snow Pea', shape: 'pod', seedPrice: 9,
+    desc: 'Crisp pods that taste best after a frost.',
+    traits: { hue: 120, size: 1, flavor: 'sweet', growth: 2, climates: ['cold', 'temperate'], yield: 4, rare: [] },
+  },
+  thunder_turnip: {
+    name: 'Thunder Turnip', shape: 'round', seedPrice: 0,
+    desc: 'Crackles when you pull it up. Found on storm islands.',
+    traits: { hue: 250, size: 3, flavor: 'earthy', growth: 4, climates: ['stormy'], yield: 2, rare: ['charged'] },
+    mix: { transforms: { gentle: 'energizing' } },
+  },
+  velvet_rose: {
+    name: 'Velvet Rose', shape: 'flower', seedPrice: 22, flower: true,
+    desc: 'Petals as soft as moss. Bees adore it.',
+    traits: { hue: 340, size: 2, flavor: 'floral', growth: 4, climates: ['temperate', 'misty'], yield: 2, rare: [] },
+    mix: { transforms: { earthy: 'velvet' } },
+  },
+  cloudberry: {
+    name: 'Cloudberry', shape: 'bush', seedPrice: 0,
+    desc: 'Pale berries that bob upward when ripe. Found on windy shoals.',
+    traits: { hue: 30, size: 1, flavor: 'tangy', growth: 3, climates: ['windy', 'misty'], yield: 3, rare: ['floating'] },
+  },
 };
 
 // =============================================================
@@ -232,5 +266,33 @@ export const LEGENDARIES = {
     hint: 'A long, long family tree.',
     traits: { hue: 0, size: 3, flavor: 'sweet', growth: 6, climates: ['temperate', 'windy', 'cold', 'warm'], yield: 3, rare: ['ancient', 'golden'] },
     requires: { minGen: 6 },
+  },
+  prism_pumpkin: {
+    name: 'Prism Pumpkin', shape: 'melon', legendary: true,
+    desc: 'Every face of it is a different colour. Carving it feels rude.',
+    hint: 'Something huge that shimmers and shines like gold.',
+    traits: { hue: 300, size: 5, flavor: 'sweet', growth: 6, climates: ['temperate', 'warm', 'windy'], yield: 1, rare: ['shimmering', 'golden', 'crystal'] },
+    requires: { rare: ['shimmering', 'golden'], minSize: 4 },
+  },
+  galewhistle_reed: {
+    name: 'Galewhistle Reed', shape: 'grain', legendary: true,
+    desc: 'Plays a whole song when the wind blows through it.',
+    hint: 'A singing, floating plant, bred in the Whistling Straits.',
+    traits: { hue: 160, size: 3, flavor: 'minty', growth: 3, climates: ['windy', 'temperate', 'misty'], yield: 3, rare: ['singing', 'floating'] },
+    requires: { rare: ['singing', 'floating'], zone: 'windy' },
+  },
+  moonpetal: {
+    name: 'Moonpetal', shape: 'flower', legendary: true, flower: true,
+    desc: 'Opens only at night. Smells like a lullaby.',
+    hint: 'A dreamy flower, bred beneath the aurora\'s light.',
+    traits: { hue: 230, size: 2, flavor: 'floral', growth: 5, climates: ['misty', 'cold'], yield: 2, rare: ['dreamy', 'glowing'] },
+    requires: { rare: ['dreamy'], flavor: 'floral', weather: 'aurora' },
+  },
+  frostheart_carrot: {
+    name: 'Frostheart Carrot', shape: 'long', legendary: true,
+    desc: 'A crystal carrot. Crunchy beyond belief.',
+    hint: 'A carrot\'s great-grandchild, frosted and crystalline.',
+    traits: { hue: 195, size: 3, flavor: 'sweet', growth: 4, climates: ['cold', 'temperate'], yield: 3, rare: ['crystal', 'frosted'] },
+    requires: { rare: ['crystal', 'frosted'], lineage: ['drift_carrot'] },
   },
 };

@@ -482,13 +482,53 @@ function drawVisualEvent(dt, t, env, layer) {
       ctx.beginPath(); ctx.moveTo(x - 70 + i * 12, y); ctx.lineTo(x - 110 + i * 15, y - 20); ctx.lineTo(x - 105 + i * 15, y + 18); ctx.fill();
     }
     ctx.globalAlpha = 1;
-  } else if ((v.type === 'birds' || v.type === 'socks' || v.type === 'crystals' || v.type === 'embers') && layer === 'front') {
+  } else if (v.type === 'lightning' && layer === 'front') {
+    if (!v.struck) { v.struck = true; G.rt.flash = 0.9; }
+    if (v.t < 0.6) {
+      ctx.strokeStyle = 'rgba(255,250,200,0.95)'; ctx.lineWidth = 3; ctx.beginPath();
+      let x = W * 0.62, y = 0; ctx.moveTo(x, y);
+      for (let i = 0; i < 7; i++) { x += ((i * 37) % 50) - 25; y += H * 0.09; ctx.lineTo(x, y); }
+      ctx.stroke();
+    }
+  } else if (v.type === 'bottle' && layer === 'back') {
+    const x = W * 0.15 + v.t * 45, y = H * 0.55 + Math.sin(t * 1.5) * 6;
+    ctx.globalAlpha = a; cloud(ctx, x - 40, y + 10, 0.9, '#ffffff');
+    ctx.save(); ctx.translate(x, y); ctx.rotate(0.4 + Math.sin(t) * 0.15);
+    ctx.fillStyle = '#9fd8c8'; ctx.beginPath(); ctx.ellipse(0, 0, 7, 12, 0, 0, 6.28); ctx.fill();
+    ctx.fillRect(-2.5, -18, 5, 8); ctx.fillStyle = '#b08a60'; ctx.fillRect(-3, -21, 6, 4);
+    ctx.fillStyle = '#f4ecdc'; ctx.fillRect(-3, -4, 6, 8);
+    ctx.restore(); ctx.globalAlpha = 1;
+  } else if (v.type === 'jellies' && layer === 'back') {
+    for (let i = 0; i < 7; i++) {
+      const x = W * (0.1 + i * 0.13) + Math.sin(t * 0.7 + i) * 20, y = H + 40 - ((v.t * 50 + i * 70) % (H + 120));
+      const pulse = 1 + Math.sin(t * 3 + i) * 0.12;
+      ctx.globalAlpha = a * 0.55; ctx.fillStyle = `hsl(${200 + i * 20},80%,78%)`;
+      ctx.beginPath(); ctx.ellipse(x, y, 16 * pulse, 11, 0, Math.PI, 0); ctx.fill();
+      ctx.strokeStyle = ctx.fillStyle; ctx.lineWidth = 1.5;
+      for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(x + k * 5, y); ctx.quadraticCurveTo(x + k * 5 + Math.sin(t * 4 + k) * 5, y + 14, x + k * 5, y + 26); ctx.stroke(); }
+    }
+    ctx.globalAlpha = 1;
+  } else if (v.type === 'ghostship' && layer === 'back') {
+    const x = W + 120 - v.t * (W + 240) / 12, y = H * 0.32 + Math.sin(t) * 8;
+    ctx.globalAlpha = a * 0.35; ctx.fillStyle = '#dfe8ff';
+    ctx.beginPath(); ctx.ellipse(x, y - 40, 50, 26, 0, 0, 6.28); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - 46, y); ctx.lineTo(x + 46, y); ctx.lineTo(x + 30, y + 18); ctx.lineTo(x - 30, y + 18); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#dfe8ff'; ctx.lineWidth = 1; ctx.beginPath(); ctx.moveTo(x - 30, y - 18); ctx.lineTo(x - 36, y); ctx.moveTo(x + 30, y - 18); ctx.lineTo(x + 36, y); ctx.stroke();
+    ctx.globalAlpha = 1;
+  } else if (v.type === 'comet' && layer === 'back') {
+    const p = v.t / 12, x = W * (1.1 - p * 1.2), y = H * (0.08 + p * 0.25);
+    const g = ctx.createLinearGradient(x, y, x + 260, y - 90);
+    g.addColorStop(0, `rgba(255,250,220,${0.9 * a})`); g.addColorStop(1, 'rgba(160,200,255,0)');
+    ctx.strokeStyle = g; ctx.lineWidth = 10; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(x, y); ctx.lineTo(x + 260, y - 90); ctx.stroke(); ctx.lineCap = 'butt';
+    ctx.globalAlpha = a; star(ctx, x, y, 9, '#ffffff'); ctx.globalAlpha = 1;
+  } else if ((v.type === 'birds' || v.type === 'socks' || v.type === 'crystals' || v.type === 'embers' || v.type === 'pollen') && layer === 'front') {
     for (let i = 0; i < 18; i++) {
       const x = (i * 97 + v.t * (v.type === 'birds' ? 160 : 30)) % (W + 100) - 50;
       const y = v.type === 'birds' ? H * 0.2 + Math.sin(i) * 60 : ((i * 53 + v.t * 80) % (H + 50)) - 25;
       ctx.globalAlpha = a;
       if (v.type === 'birds') { ctx.strokeStyle = '#3a3a5a'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(x - 6, y - 3); ctx.lineTo(x, y); ctx.lineTo(x + 6, y - 3); ctx.stroke(); }
       else if (v.type === 'socks') { ctx.fillStyle = `hsl(${i * 40},60%,65%)`; ctx.fillRect(x, y, 6, 12); ctx.fillRect(x, y + 9, 10, 4); }
+      else if (v.type === 'pollen') { ctx.fillStyle = '#ffe680'; ctx.beginPath(); ctx.arc(x, y, 2.5, 0, 6.28); ctx.fill(); }
       else { star(ctx, x, y, 3, v.type === 'embers' ? '#ff9a4a' : '#c8f0ff'); }
     }
     ctx.globalAlpha = 1;

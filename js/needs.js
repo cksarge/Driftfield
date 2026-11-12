@@ -24,6 +24,7 @@ export function itemSatisfies(key, need) {
     if (info.kind !== 'crop') return false;
     const c = getCrop(info.cropId);
     if (need.crop.hybrid && !(c.hybrid || c.legendary)) return false;
+    if (need.crop.legendary && !c.legendary) return false;
     if (need.crop.rare && !need.crop.rare.every(r => c.traits.rare.includes(r))) return false;
     return true;
   }
@@ -70,6 +71,7 @@ export function needText(need) {
   }
   if (need.crop) {
     if (need.crop.rare) return `${q} × crop with ${need.crop.rare.map(r => DATA.RARE_TRAITS[r].name).join(' + ')} trait`;
+    if (need.crop.legendary) return `${q} × legendary crop`;
     if (need.crop.hybrid) return `${q} × hybrid crop`;
     return `${q} × crop`;
   }

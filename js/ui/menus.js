@@ -9,7 +9,7 @@ import { itemInfo, count } from '../items.js';
 import { slotSummaries, latestSlot, deleteSlot, exportSlot, exportSave, importSaveFile, saveGame, saveSettings, storageAvailable } from '../save.js';
 import { unlocked, unlockText, palette } from '../customize.js';
 import { todayFestival, attend, contestEntries, enterContest, festivalRecord, entryScore } from '../festivals.js';
-import { feed, collect, isFood, collectHive } from '../animals.js';
+import { feed, collect, isFood, collectHive, productEvery } from '../animals.js';
 import { repairWindmill, WINDMILL_REPAIR, cycleRoof } from '../buildings.js';
 import { drawPlayer, drawFlag } from '../art.js';
 import { openPanel, refreshPanel, closePanel, h, $, toast, pickItem, confirmBox, itemTile, showDialog } from './ui.js';
@@ -163,7 +163,7 @@ export function openFestival() {
     if (!rec.attended) body.append(h('button', { class: 'btn gold', onclick: () => { attend(id); audio.sfx('discover'); toast('You joined the festival! Gifts received.'); refreshPanel(); } }, 'Join the festival'));
     else body.append(h('p', { class: 'small ok' }, '✓ You\'re at the festival. Enjoy!'));
     if (f.contest) {
-      body.append(h('h3', {}, `Contest: best ${f.contest}`));
+      body.append(h('h3', {}, `Contest: ${f.label || 'best ' + f.contest}`));
       if (rec.entered) body.append(h('p', {}, rec.won ? '🏆 You won! Prizes are in your bag.' : 'The judges loved your entry, but someone else took the ribbon this year. Next year!'));
       else {
         const entries = contestEntries(id);
@@ -191,7 +191,11 @@ export function openAnimalMenu(a) {
     const hearts = '♥'.repeat(a.happy) + '♡'.repeat(5 - a.happy);
     body.append(h('p', { class: 'small' }, def.desc),
       h('div', { class: 'small' }, `Happiness: ${hearts} · Coat: ${a.pattern}${a.baby ? ` · Baby (grows up in ${a.baby} days)` : ''}`),
-      h('div', { class: 'small muted' }, a.fed ? `Ate ${a.fed.name} today. Makes ${def.product.toLowerCase()} every ${def.every} day(s).` : `Hungry! What it eats changes its ${def.product.toLowerCase()}.`));
+      h('div', { class: 'small' }, (a.traits || []).length
+        ? ['Traits: ', ...(a.traits || []).map(t => h('span', { class: 'chip trait', title: DATA.ANIMAL_TRAITS[t].desc }, DATA.ANIMAL_TRAITS[t].name))]
+        : 'No special traits. Breeding can pass traits down, and sometimes a new one appears.'),
+      a.parents ? h('div', { class: 'small muted' }, `Parents: ${a.parents.join(' & ')}`) : null,
+      h('div', { class: 'small muted' }, a.fed ? `Ate ${a.fed.name} today. Makes ${def.product.toLowerCase()} every ${productEvery(a)} day(s).` : `Hungry! What it eats changes its ${def.product.toLowerCase()}.`));
     if (!a.fed && !a.baby) body.append(h('button', { class: 'btn', onclick: async () => {
       const key = await pickItem(`Feed ${a.name}`, i => isFood(i.key), 'No food! Crops, mixes and foraged goods all work.');
       if (!key) return;

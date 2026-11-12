@@ -202,7 +202,11 @@ function wireEvents() {
   on('truth', () => showDialog('wendell', ['Wait. Put the clues together…', DATA.TRUTH, 'Let\'s finish the Beacon. For everyone.']));
   on('legendary', (id) => { const c = getCrop(id); toast(`🌟 LEGENDARY: ${c.name}!`, 'discover'); audio.chime(); });
   on('birds', () => { if (loud()) toast('🐦 Sky birds pecked a ripe crop! A scarecrow keeps them away.'); });
-  on('animal:born', ({ animal }) => { if (loud()) { toast(`🍼 A baby ${DATA.ANIMALS[animal.species].name} was born: ${animal.name}!`, 'discover'); } });
+  on('animal:born', ({ animal }) => {
+    if (!loud()) return;
+    toast(`🍼 A baby ${DATA.ANIMALS[animal.species].name} was born: ${animal.name}!`, 'discover');
+    if (animal.newTrait) toast(`✨ ${animal.name} has a brand-new trait: ${DATA.ANIMAL_TRAITS[animal.newTrait].name}!`, 'discover');
+  });
   on('trader:arrived', ({ id }) => { if (loud()) toast(`🎈 ${DATA.TRADERS[id].ship} has docked!`); });
   on('delivery:new', (d) => { if (loud()) toast(`📦 New delivery request: "${d.text}"`); });
   on('delivery:expired', (d) => { if (loud()) toast(`The ${DATA.TRADERS[d.trader].ship} left without their delivery. Maybe next time.`); });
@@ -229,6 +233,8 @@ function wireEvents() {
     G.rt.flash = 0.8;
     showDialog('wendell', [...DATA.ENDING, 'Endless mode: the sky goes on forever, and so do your discoveries.']);
   });
+  on('chapter2:start', () => setTimeout(() => showDialog('wendell', DATA.CHAPTER_TWO.hint), 1200));
+  on('epilogue', () => { audio.chime(); G.rt.flash = 0.5; setTimeout(() => showDialog('wendell', [...DATA.EPILOGUE, 'The sky is yours. Keep growing, keep mixing, keep drifting.']), 400); });
   on('harvest', () => { /* sounds handled by interact */ });
   on('drink', ({ effects }) => { if (effects.includes('floaty')) toast('You feel light as a feather. Glide range +2 today!'); });
   on('hour', (h) => {

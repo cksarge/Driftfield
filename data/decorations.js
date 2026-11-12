@@ -47,6 +47,11 @@ export default {
   float_lantern: { name: 'Harvest Float',   art: 'lantern',   color: '#ff9a4a', light: 2.5, source: 'festival', desc: 'From the Harvest Float.' },
   star_jar:      { name: 'Jar of Starlight',art: 'starlamp',  color: '#fff3a0', light: 3, source: 'festival', desc: 'From Starfall night.' },
   bloom_crown:   { name: 'Bloom Throne',    art: 'arch',      color: '#ffb3de', source: 'festival', flower: true, desc: 'From the Bloom Parade.' },
+  honey_fountain:{ name: 'Honey Fountain',  art: 'birdbath',  color: '#f2b640', source: 'festival', desc: 'From the Honey Fair.' },
+  giant_scale:   { name: 'Giant\'s Scale',   art: 'sundial',   color: '#c9a86a', source: 'festival', desc: 'From the Giant Weigh-In.' },
+  swap_sign:     { name: 'Seed Swap Sign',  art: 'sign',      color: '#9fcf7a', source: 'festival', desc: 'From the Sprout Swap.' },
+  sky_lantern:   { name: 'Sky Lantern',     art: 'lantern',   color: '#ffcf6a', light: 3, source: 'festival', desc: 'From Lantern Night. It never quite floats away.' },
+  gale_chime:    { name: 'Gale\'s Wind Chime', art: 'chime',    color: '#c8d4f0', source: 'quest', desc: 'A gift from the Hundred-Year Gale. It rings softly whenever anyone yawns.' },
   ribbon_trophy: { name: 'Ribbon Trophy',   art: 'trophy',    color: '#f0c050', source: 'festival', desc: 'You won a contest!' },
 
   // Keepsakes from the lost island (recovered pieces)

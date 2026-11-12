@@ -3,6 +3,7 @@
 //
 //  zones:     which zones they appear in ('*' = any)
 //  seasons:   (optional) only in these seasons (0 spring … 3 winter)
+//  after:     (optional) 'lit' = only appears once the Beacon is lit
 //  chance:    how likely it is to show up when an island passes (weight)
 //  distance:  glide range needed (your glider starts at 2)
 //  colors:    [grass, rock] for drawing
@@ -55,7 +56,7 @@ export default {
     desc: 'Hollow rocks that whistle. Kites tangle in every tree.',
     spots: [
       { type: 'npc', label: 'Kite workshop', character: 'pip' },
-      { type: 'seeds', label: 'Whistling reeds', pool: ['windsong_reed', 'breeze_bean', 'sky_wheat'], uses: 2 },
+      { type: 'seeds', label: 'Whistling reeds', pool: ['windsong_reed', 'breeze_bean', 'sky_wheat', 'cloudberry'], uses: 2 },
       { type: 'gather', label: 'Bellflowers', item: 'bell_flower', qty: [1, 3], uses: 1 },
       { type: 'gather', label: 'Feather nests', item: 'feather', qty: [2, 4], uses: 1 },
       { type: 'chest', label: 'Tangled kite bag', loot: [{ key: 'recipe:kite' }, { key: 'recipe:wind_chime' }, { key: 'rope', qty: 4 }] },
@@ -78,7 +79,7 @@ export default {
     spots: [
       { type: 'gather', label: 'Cloud puffs', item: 'cloud_puff', qty: [2, 4], uses: 2 },
       { type: 'gather', label: 'Dew-soaked moss', item: 'moon_dew', qty: [1, 1], uses: 1 },
-      { type: 'seeds', label: 'Cotton bushes', pool: ['cloud_cotton', 'mist_mint', 'star_lily', 'tea_bush'], uses: 2 },
+      { type: 'seeds', label: 'Cotton bushes', pool: ['cloud_cotton', 'mist_mint', 'star_lily', 'tea_bush', 'glimmer_grape', 'cloudberry'], uses: 2 },
       { type: 'gather', label: 'Driftwood', item: 'wood', qty: [2, 3], uses: 1 },
     ],
   },
@@ -87,7 +88,7 @@ export default {
     desc: 'Icicles hang from its underside like a chandelier.',
     spots: [
       { type: 'gather', label: 'Icicles', item: 'frost_shard', qty: [1, 3], uses: 2 },
-      { type: 'seeds', label: 'Frozen garden', pool: ['frost_berry', 'crystal_root', 'drift_carrot', 'moon_melon'], uses: 2 },
+      { type: 'seeds', label: 'Frozen garden', pool: ['frost_berry', 'crystal_root', 'drift_carrot', 'moon_melon', 'snow_pea'], uses: 2 },
       { type: 'gather', label: 'Stone shelf', item: 'stone', qty: [3, 5], uses: 1 },
       { type: 'piece', label: 'A frame in the ice', piece: 'picture_frame' },
     ],
@@ -108,7 +109,7 @@ export default {
       { type: 'gather', label: 'Scrap heap', item: 'old_gear', qty: [1, 3], uses: 2 },
       { type: 'gather', label: 'Glassed sand', item: 'storm_glass', qty: [1, 2], uses: 1 },
       { type: 'gather', label: 'Thunder moss', item: 'thunder_moss', qty: [1, 2], uses: 1 },
-      { type: 'seeds', label: 'Pepper sprouts', pool: ['storm_pepper', 'ember_chili'], uses: 1 },
+      { type: 'seeds', label: 'Pepper sprouts', pool: ['storm_pepper', 'ember_chili', 'thunder_turnip'], uses: 1 },
       { type: 'chest', label: 'Captain\'s locker', loot: [{ key: 'bp:lightning_rod' }, { key: 'clue:wreck_manifest' }] },
       { type: 'piece', label: 'A small dog, barking', piece: 'biscuit' },
     ],
@@ -202,6 +203,48 @@ export default {
       { type: 'chest', label: 'The well', loot: [{ key: 'deco:wishing_well' }, { key: 'coins', qty: 60 }] },
       { type: 'gather', label: 'Wild herbs', item: 'wild_herb', qty: [1, 3], uses: 1 },
       { type: 'secret', label: 'Something glinting at the bottom', chance: 0.3, loot: [{ key: 'glider_wing', qty: 1 }] },
+    ],
+  },
+  clover_downs: {
+    name: 'Clover Downs', zones: ['sunny', 'windy', 'misty'], chance: 3, distance: 2, colors: ['#9ad87a', '#9a8a70'],
+    desc: 'Rolling clover fields full of bunnies, ducks and one very large cow.',
+    spots: [
+      { type: 'npc', label: 'Red barn', character: 'juniper' },
+      { type: 'gather', label: 'Clover patch', item: 'fiber', qty: [4, 7], uses: 2 },
+      { type: 'gather', label: 'Duck pond feathers', item: 'feather', qty: [2, 4], uses: 1 },
+      { type: 'seeds', label: 'Hedgerow', pool: ['velvet_rose', 'snow_pea', 'honey_blossom', 'puff_pumpkin'], uses: 1 },
+      { type: 'chest', label: 'Feed trunk', loot: [{ key: 'recipe:feed_bag' }, { key: 'animal:puff_bunny', qty: 1 }] },
+    ],
+  },
+  chartwell: {
+    name: 'Chartwell Spire', zones: ['windy', 'crystal', 'frozen'], chance: 2, distance: 3, colors: ['#a8c8d8', '#8a90a0'],
+    desc: 'A thin tower papered floor to ceiling with sky charts.',
+    spots: [
+      { type: 'npc', label: 'Map room', character: 'marlo' },
+      { type: 'gather', label: 'Crystal outcrop', item: 'sky_crystal', qty: [1, 2], uses: 1 },
+      { type: 'gather', label: 'Wind-blown scraps', item: 'cloud_puff', qty: [2, 3], uses: 1 },
+      { type: 'chest', label: 'Old chart case', loot: [{ key: 'map_fragment', qty: 1 }, { key: 'echo_shell', qty: 2 }] },
+      { type: 'secret', label: 'Hidden drawer', chance: 0.35, loot: [{ key: 'glider_wing', qty: 1 }] },
+    ],
+  },
+  lantern_reef: {
+    name: 'Lantern Reef', zones: ['crystal', 'aurora', 'misty'], chance: 2, distance: 3, colors: ['#8ad0c0', '#6a7090'],
+    desc: 'Coral-like rock that glows softly after dark. Sky jellyfish drift around it.',
+    spots: [
+      { type: 'gather', label: 'Glowing coral', item: 'sky_crystal', qty: [1, 2], uses: 1 },
+      { type: 'gather', label: 'Dew pools', item: 'moon_dew', qty: [1, 3], uses: 1 },
+      { type: 'seeds', label: 'Reef garden', pool: ['glimmer_grape', 'aurora_fig', 'cloudberry'], uses: 2 },
+      { type: 'secret', label: 'Prism grotto', chance: 0.3, loot: [{ key: 'prism_petal', qty: 1 }, { key: 'star_dust', qty: 1 }] },
+    ],
+  },
+  galehollow: {
+    name: 'Galehollow', zones: ['*'], after: 'lit', chance: 4, distance: 2, colors: ['#c8d8f0', '#8a90b0'],
+    desc: 'A soft island made of folded wind. It only drifts up now that the Beacon shines.',
+    spots: [
+      { type: 'npc', label: 'The sleepy breeze', character: 'gale' },
+      { type: 'gather', label: 'Feather drifts', item: 'gale_feather', qty: [1, 1], uses: 1 },
+      { type: 'gather', label: 'Cloud scraps', item: 'cloud_puff', qty: [2, 4], uses: 1 },
+      { type: 'seeds', label: 'Wind-sown seeds', pool: ['cloudberry', 'windsong_reed', 'cloud_cotton', 'thunder_turnip'], uses: 2 },
     ],
   },
 };
