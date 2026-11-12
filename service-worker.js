@@ -3,11 +3,12 @@
 //
 //  On install it caches every game file listed below. Afterwards
 //  the game loads from the cache first, so it works with no
-//  internet at all. When you change any file, bump CACHE_VERSION
-//  so players get the update (and add any NEW files to the list).
+//  internet at all. After changing files, run
+//  `node tools/build-sw.mjs`: it rewrites FILES and CACHE_VERSION
+//  so players get the update.
 // =============================================================
 
-const CACHE_VERSION = 'driftfield-v2';
+const CACHE_VERSION = 'driftfield-ddb407e517';
 
 const FILES = [
   './',
