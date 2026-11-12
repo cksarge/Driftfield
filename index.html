@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+  <title>Driftfield</title>
+  <meta name="description" content="A cozy sky-farming game. Rebuild your floating island, mix, crossbreed and discover.">
+  <meta name="theme-color" content="#8fd0f0">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" href="./assets/icons/icon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="./assets/icons/icon-192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <link rel="stylesheet" href="./css/base.css">
+  <link rel="stylesheet" href="./css/hud.css">
+  <link rel="stylesheet" href="./css/panels.css">
+  <link rel="stylesheet" href="./css/animations.css">
+</head>
+<body>
+  <!-- The world is drawn on this canvas (js/render.js) -->
+  <canvas id="game" aria-label="Your floating island"></canvas>
+
+  <!-- ===== HUD (top) ===== -->
+  <div id="hud" hidden>
+    <div class="hud-card" id="hud-clock">
+      <div id="hud-date"></div>
+      <div id="hud-time"></div>
+    </div>
+    <div class="hud-card" id="hud-where">
+      <div><span id="hud-zone"></span> · <span id="hud-weather"></span></div>
+      <div class="small" id="hud-next"></div>
+    </div>
+    <div class="hud-card coins" title="Shells (money)">🐚 <span id="hud-coins">0</span></div>
+    <div id="hud-flags"></div>
+    <div class="hud-right">
+      <button id="btn-skip" class="btn small ghost" hidden>Skip tutorial ⏭</button>
+      <button id="btn-mute" class="icon-btn" aria-label="Mute">🔊</button>
+      <button id="btn-menu" class="icon-btn" aria-label="Settings">⚙️</button>
+    </div>
+  </div>
+
+  <div id="objective" hidden></div>
+  <div id="mode-banner" hidden>
+    <span id="mode-text"></span>
+    <button id="mode-rotate" class="btn small ghost" hidden>⟳ Rotate</button>
+    <button id="mode-cancel" class="btn small ghost">Done</button>
+  </div>
+
+  <!-- ===== Side buttons ===== -->
+  <nav id="sidebar" hidden>
+    <button id="btn-bag" class="side"><span>🎒</span>Bag</button>
+    <button id="btn-mix" class="side"><span>🧪</span>Mix</button>
+    <button id="btn-craft" class="side"><span>🔨</span>Craft</button>
+    <button id="btn-build" class="side"><span>🏡</span>Build</button>
+    <button id="btn-trade" class="side"><span>🎈</span>Trade</button>
+    <button id="btn-explore" class="side"><span>🪂</span>Explore</button>
+    <button id="btn-map" class="side"><span>🗺️</span>Map</button>
+    <button id="btn-journal" class="side"><span>📖</span>Journal</button>
+    <button id="btn-festival" class="side festival" hidden><span>🎉</span>Festival</button>
+    <button id="btn-sleep" class="side"><span>😴</span>Sleep</button>
+  </nav>
+
+  <!-- ===== Toolbar (bottom) ===== -->
+  <div id="toolbar" hidden>
+    <button class="tool" id="tool-hand" data-tool="hand" title="Hand: harvest, care for animals, use buildings (1)"><span>✋</span>Hand</button>
+    <button class="tool" id="tool-hoe" data-tool="hoe" title="Hoe: till soil (2)"><span>⛏️</span>Hoe</button>
+    <button class="tool" id="tool-water" data-tool="water" title="Watering can (3)"><span>💧</span>Water</button>
+    <button class="tool" id="tool-seed" data-tool="seed" title="Plant seeds (4). Tap again to choose."><span>🌱</span>Seeds<img alt="" hidden></button>
+    <button class="tool" id="tool-fert" data-tool="fert" title="Fertilize (5). Tap again to choose."><span>🧪</span>Fertilize<img alt="" hidden></button>
+    <button class="tool" id="tool-paint" data-tool="paint" title="Paint with dye (6). Tap again to choose."><span>🎨</span>Paint<img alt="" hidden></button>
+  </div>
+
+  <!-- ===== Dialogue ===== -->
+  <div id="dialog" hidden>
+    <canvas id="dialog-portrait" width="88" height="88"></canvas>
+    <div class="dialog-body">
+      <div id="dialog-name"></div>
+      <div id="dialog-text"></div>
+      <div id="dialog-choices"></div>
+    </div>
+    <div id="dialog-next">▶</div>
+  </div>
+
+  <div id="panel-root" hidden></div>
+  <div id="picker-root" hidden></div>
+  <div id="toasts" aria-live="polite"></div>
+  <div id="tooltip" hidden></div>
+  <div id="fade"></div>
+
+  <!-- ===== Title screen ===== -->
+  <div id="title" hidden>
+    <div class="title-sky">
+      <div class="title-cloud c1"></div><div class="title-cloud c2"></div><div class="title-cloud c3"></div>
+      <div class="title-island"><div class="ti-top"></div><div class="ti-rock"></div><div class="ti-mill"></div></div>
+    </div>
+    <div class="title-box">
+      <h1>Driftfield</h1>
+      <p class="tagline">A cozy sky-farming game about losing everything, and growing it back.</p>
+      <div id="title-menu"></div>
+      <p class="small muted credits">Made with plain HTML, CSS &amp; JavaScript · Plays offline</p>
+    </div>
+  </div>
+
+  <noscript><p style="padding:2em">Driftfield needs JavaScript to run.</p></noscript>
+  <script type="module" src="./js/main.js"></script>
+</body>
+</html>
