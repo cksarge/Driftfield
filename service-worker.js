@@ -8,7 +8,7 @@
 //  so players get the update.
 // =============================================================
 
-const CACHE_VERSION = 'driftfield-ddb407e517';
+const CACHE_VERSION = 'driftfield-0c383ebc54';
 
 const FILES = [
   './',

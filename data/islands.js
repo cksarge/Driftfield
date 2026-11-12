@@ -238,7 +238,7 @@ export default {
     ],
   },
   galehollow: {
-    name: 'Galehollow', zones: ['*'], after: 'lit', chance: 4, distance: 2, colors: ['#c8d8f0', '#8a90b0'],
+    name: 'Galehollow', zones: ['*'], after: 'lit', chance: 2, distance: 2, colors: ['#c8d8f0', '#8a90b0'],
     desc: 'A soft island made of folded wind. It only drifts up now that the Beacon shines.',
     spots: [
       { type: 'npc', label: 'The sleepy breeze', character: 'gale' },

@@ -13,7 +13,8 @@ import { trackCropDiscovery } from './farming.js';
 import { initStory } from './story.js';
 import { startTutorial, startMainGame, skipTutorial, updateStorm, initTips } from './tutorial.js';
 import { todayFestival } from './festivals.js';
-import { getCrop, itemInfo } from './items.js';
+import { getCrop, itemInfo, addItem } from './items.js';
+import { randomHybrid } from './breeding.js';
 import { discover } from './state.js';
 import { initRender, render, centerCamera, triggerVisual } from './render.js';
 import { initInput } from './input.js';
@@ -200,6 +201,12 @@ function wireEvents() {
   on('blueprint:unlocked', (id) => { discover('blueprints', id, DATA.BUILDINGS[id].name); if (loud()) toast(`📐 Blueprint: ${DATA.BUILDINGS[id].name}! Build it from the Build menu.`); });
   on('clue:new', ({ clue }) => { if (loud()) { audio.chime(); showDialog('wendell', [`A clue! "${clue.title}". I've put it in the Journal under Beacon.`]); } });
   on('truth', () => showDialog('wendell', ['Wait. Put the clues together…', DATA.TRUTH, 'Let\'s finish the Beacon. For everyone.']));
+  // Rewards of 'seed:random_hybrid' become a real seed of a brand-new cross.
+  on('random:hybrid', () => {
+    const id = randomHybrid();
+    addItem('seed:' + id, 1);
+    if (loud()) toast(`🌱 A mysterious seed: ${getCrop(id).name}!`, 'discover');
+  });
   on('legendary', (id) => { const c = getCrop(id); toast(`🌟 LEGENDARY: ${c.name}!`, 'discover'); audio.chime(); });
   on('birds', () => { if (loud()) toast('🐦 Sky birds pecked a ripe crop! A scarecrow keeps them away.'); });
   on('animal:born', ({ animal }) => {
