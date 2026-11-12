@@ -1,0 +1,11 @@
+# Editor / OS clutter
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
+*.swp
+
+# Local tooling
+node_modules/
+npm-debug.log*
+.claude/
