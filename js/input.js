@@ -19,7 +19,7 @@ let drag = null, pinch = null;
 
 export function initInput(canvas) {
   canvas.addEventListener('pointerdown', (e) => {
-    canvas.setPointerCapture(e.pointerId);
+    try { canvas.setPointerCapture(e.pointerId); } catch (err) { /* not capturable; fine */ }
     pointers.set(e.pointerId, { x: e.clientX, y: e.clientY });
     if (pointers.size === 1) drag = { x: e.clientX, y: e.clientY, cx: G.rt.camera.x, cy: G.rt.camera.y, moved: false };
     if (pointers.size === 2) {
@@ -51,7 +51,9 @@ export function initInput(canvas) {
   };
   canvas.addEventListener('pointerup', end);
   canvas.addEventListener('pointercancel', end);
-  canvas.addEventListener('pointerleave', () => { G.rt.hover = null; });
+  // Touch pointers "leave" right after every tap, so only clear hover for mice
+  // (otherwise the tap-to-preview, tap-to-confirm placement could never confirm).
+  canvas.addEventListener('pointerleave', (e) => { if (e.pointerType === 'mouse') G.rt.hover = null; });
   canvas.addEventListener('wheel', (e) => {
     e.preventDefault();
     G.rt.camera.zoom = clamp(G.rt.camera.zoom * (e.deltaY < 0 ? 1.1 : 0.9), 0.4, 2.4);

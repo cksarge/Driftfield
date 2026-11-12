@@ -144,7 +144,7 @@ export function openCustomize() {
         h('h4', {}, 'Flag pattern'), h('div', { class: 'choices' }, DATA.FLAG_PATTERNS.map(pt => h('button', { class: 'chip-btn' + (G.state.flag.pattern === pt ? ' on' : ''), onclick: () => { G.state.flag.pattern = pt; refreshPanel(); } }, pt))),
         h('h4', {}, 'Flag colours'), swatches(G.state.flag.c1, c => { G.state.flag.c1 = c; }), swatches(G.state.flag.c2, c => { G.state.flag.c2 = c; }),
         h('h4', {}, 'Sail colour'), swatches(G.state.sail, c => { G.state.sail = c; }),
-        h('h4', {}, 'Airship balloon'), swatches(G.state.balloon, c => { G.state.balloon = c; }),
+        h('h4', {}, 'Lift balloon colour'), swatches(G.state.balloon, c => { G.state.balloon = c; }),
         h('p', { class: 'small muted' }, 'Every dye you make adds a new colour here. Paint buildings with dyes from your bag.'))));
   } });
 }

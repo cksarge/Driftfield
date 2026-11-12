@@ -8,8 +8,8 @@ Mix strange products, crossbreed new crops, breed animals, recover pieces of you
 
 ### ▶ Play: [driftfield.carterscoding.com](https://driftfield.carterscoding.com)
 
-![Screenshot of Driftfield](assets/screenshot.png)
-*(Screenshot placeholder: add a screenshot at `assets/screenshot.png`.)*
+![Screenshot of the Perfect Island in Driftfield](assets/screenshot.png)
+*The Perfect Island, just before the storm. (Replace `assets/screenshot.png` with your own favourite moment.)*
 
 ---
 

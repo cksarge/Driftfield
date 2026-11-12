@@ -44,7 +44,7 @@ export const viewSize = () => ({ W, H });
 
 function newCloud(anywhere) {
   const layer = Math.random() < 0.6 ? 0 : 1;          // 0 far, 1 near (below island)
-  return { x: anywhere ? rand(-200, W + 200) : -260, y: layer ? rand(H * 0.55, H * 1.05) : rand(-20, H * 0.9), s: layer ? rand(0.9, 2.2) : rand(0.4, 1.1), layer, speed: rand(6, 16) * (layer ? 1.6 : 1) };
+  return { x: anywhere ? rand(-200, W + 200) : -260, y: layer ? rand(H * 0.78, H * 1.1) : rand(-20, H * 0.9), s: layer ? rand(0.9, 2.2) : rand(0.4, 1.1), layer, speed: rand(6, 16) * (layer ? 1.6 : 1) };
 }
 
 // ---------------- colours ----------------
@@ -102,7 +102,7 @@ export function render(dt, t) {
   const env = {
     night: nightAmount(), weather: s.weather.today, dark: tutorialDarkness(),
     wind: ['wind', 'storm'].includes(s.weather.today), morning: s.time.min < 8 * 60,
-    flag: s.flag, sail: s.sail, powered: s.windmillFixed,
+    flag: s.flag, sail: s.sail, balloon: s.balloon, powered: s.windmillFixed,
   };
   if (G.rt.storm) env.wind = true;
   ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -130,7 +130,7 @@ export function render(dt, t) {
   drawIsland(dt, t, env);
 
   // Near clouds
-  for (const c of clouds) if (c.layer === 1 && (G.settings.quality !== 'low' || clouds.indexOf(c) % 2)) cloud(ctx, c.x, c.y, c.s, shade('#ffffff', -(env.night * 0.5 + env.dark * 0.4)), 0.8);
+  for (const c of clouds) if (c.layer === 1 && (G.settings.quality !== 'low' || clouds.indexOf(c) % 2)) cloud(ctx, c.x, c.y, c.s, shade('#ffffff', -(env.night * 0.5 + env.dark * 0.4)), 0.6);
 
   drawWeather(dt, t, env);
   drawVisualEvent(dt, t, env, 'front');

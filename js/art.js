@@ -226,7 +226,9 @@ export function drawBuilding(ctx, o, t, env) {
       line(ctx, x + w / 2 - 8, y + h - 8, x + w / 2 - 10, y - h * 0.3 + bob, '#8a6a4a', 1);
       line(ctx, x + w / 2 + 8, y + h - 8, x + w / 2 + 10, y - h * 0.3 + bob, '#8a6a4a', 1);
       fillRR(ctx, x + w / 2 - 9, y + h - 16, 18, 12, 2, '#a0683a');
-      ellipse(ctx, x + w / 2, y - h * 0.65 + bob, 20, 24, o.color);
+      // Unpainted lift balloons use the island balloon colour from Customize.
+      const bc = o.color === def.wall ? (env.balloon || o.color) : o.color;
+      ellipse(ctx, x + w / 2, y - h * 0.65 + bob, 20, 24, bc);
       ellipse(ctx, x + w / 2 - 6, y - h * 0.75 + bob, 6, 9, 'rgba(255,255,255,0.4)');
       break;
     }
